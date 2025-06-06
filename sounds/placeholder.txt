@@ -1,0 +1,12 @@
+This file is a placeholder to ensure the sounds directory exists.
+
+The following sound files should be placed in this directory:
+- eat.mp3: Sound effect for when the snake eats food
+- game-over.mp3: Sound effect for when the game ends
+- level-up.mp3: Sound effect for when the player levels up
+- background.mp3: Background music for the game
+
+You can find free sound effects on websites like:
+- https://freesound.org/
+- https://pixabay.com/sound-effects/
+- https://mixkit.co/free-sound-effects/

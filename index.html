@@ -1,0 +1,169 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Snake Master - Professional Snake Game</title>
+    <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Press+Start+2P&display=swap" rel="stylesheet">
+</head>
+<body>
+    <div class="game-wrapper">
+        <!-- Main Menu Screen -->
+        <div id="main-menu" class="screen active">
+            <div class="logo-container">
+                <h1 class="game-logo">Snake Master</h1>
+                <div class="snake-logo-container">
+                    <div class="snake-logo">
+                        <div class="snake-dot head"></div>
+                        <div class="snake-dot"></div>
+                        <div class="snake-dot"></div>
+                        <div class="snake-dot"></div>
+                        <div class="snake-dot"></div>
+                        <div class="snake-dot"></div>
+                        <div class="snake-dot"></div>
+                        <div class="snake-dot"></div>
+                        <div class="snake-dot"></div>
+                    </div>
+                    <div class="food-logo"></div>
+                    <div class="special-food-logo"></div>
+                </div>
+            </div>
+            <div class="menu-buttons">
+                <button id="play-button" class="menu-button">PLAY GAME</button>
+                <button id="options-button" class="menu-button">OPTIONS</button>
+                <button id="highscores-button" class="menu-button">HIGH SCORES</button>
+            </div>
+            <div class="version">v1.0</div>
+        </div>
+
+        <!-- Options Screen -->
+        <div id="options-menu" class="screen">
+            <h2>Game Options</h2>
+            <div class="options-container">
+                <div class="option">
+                    <label for="difficulty">Difficulty:</label>
+                    <select id="difficulty">
+                        <option value="easy">Easy</option>
+                        <option value="medium" selected>Medium</option>
+                        <option value="hard">Hard</option>
+                        <option value="extreme">Extreme</option>
+                    </select>
+                </div>
+                <div class="option">
+                    <label for="game-theme">Theme:</label>
+                    <select id="game-theme">
+                        <option value="classic" selected>Classic</option>
+                        <option value="neon">Neon</option>
+                        <option value="retro">Retro</option>
+                        <option value="dark">Dark</option>
+                    </select>
+                </div>
+                <div class="option">
+                    <label for="sound-toggle">Sound Effects:</label>
+                    <label class="switch">
+                        <input type="checkbox" id="sound-toggle" checked>
+                        <span class="slider round"></span>
+                    </label>
+                </div>
+                <div class="option">
+                    <label for="music-toggle">Background Music:</label>
+                    <label class="switch">
+                        <input type="checkbox" id="music-toggle" checked>
+                        <span class="slider round"></span>
+                    </label>
+                </div>
+            </div>
+            <button id="options-back" class="back-button">Back to Menu</button>
+        </div>
+
+        <!-- High Scores Screen -->
+        <div id="highscores-screen" class="screen">
+            <h2>High Scores</h2>
+            <div class="highscores-container">
+                <table id="highscores-table">
+                    <thead>
+                        <tr>
+                            <th>Rank</th>
+                            <th>Name</th>
+                            <th>Score</th>
+                            <th>Difficulty</th>
+                        </tr>
+                    </thead>
+                    <tbody id="highscores-body">
+                        <!-- High scores will be populated here -->
+                    </tbody>
+                </table>
+            </div>
+            <button id="highscores-back" class="back-button">Back to Menu</button>
+        </div>
+
+        <!-- Game Screen -->
+        <div id="game-screen" class="screen">
+            <div class="game-header">
+                <div class="game-info">
+                    <div class="score-container">
+                        <span>Score: </span>
+                        <span id="score">0</span>
+                    </div>
+                    <div class="high-score-container">
+                        <span>High Score: </span>
+                        <span id="high-score">0</span>
+                    </div>
+                </div>
+                <div class="level-info">
+                    <span>Level: </span>
+                    <span id="level">1</span>
+                </div>
+            </div>
+            
+            <div id="game-board"></div>
+            
+            <div class="game-controls">
+                <button id="pause-button" class="control-button"><i class="fas fa-pause"></i></button>
+                <button id="restart-button" class="control-button"><i class="fas fa-redo"></i></button>
+                <button id="menu-button" class="control-button"><i class="fas fa-home"></i></button>
+            </div>
+
+            <!-- Mobile Controls -->
+            <div class="mobile-controls">
+                <button id="up-button" class="direction-button"><i class="fas fa-arrow-up"></i></button>
+                <div class="horizontal-controls">
+                    <button id="left-button" class="direction-button"><i class="fas fa-arrow-left"></i></button>
+                    <button id="right-button" class="direction-button"><i class="fas fa-arrow-right"></i></button>
+                </div>
+                <button id="down-button" class="direction-button"><i class="fas fa-arrow-down"></i></button>
+            </div>
+        </div>
+
+        <!-- Game Over Screen -->
+        <div id="game-over-screen" class="screen">
+            <h2>Game Over!</h2>
+            <div class="final-score">
+                <p>Your Score: <span id="final-score">0</span></p>
+                <p>High Score: <span id="final-high-score">0</span></p>
+            </div>
+            <div id="new-high-score-message" class="hidden">
+                <h3>New High Score!</h3>
+                <div class="name-input">
+                    <label for="player-name">Enter your name:</label>
+                    <input type="text" id="player-name" maxlength="10" placeholder="Your Name">
+                </div>
+            </div>
+            <div class="game-over-buttons">
+                <button id="play-again-button">Play Again</button>
+                <button id="game-over-menu-button">Main Menu</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Audio Elements -->
+    <audio id="eat-sound" src="sounds/eat.mp3" preload="auto"></audio>
+    <audio id="game-over-sound" src="sounds/game-over.mp3" preload="auto"></audio>
+    <audio id="level-up-sound" src="sounds/level-up.mp3" preload="auto"></audio>
+    <audio id="background-music" src="sounds/background.mp3" loop preload="auto"></audio>
+
+    <script src="script.js"></script>
+</body>
+</html>
