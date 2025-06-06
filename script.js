@@ -16,6 +16,7 @@ document.addEventListener('DOMContentLoaded', () => {
     const SPECIAL_FOOD_POINTS = 5;
     const SPECIAL_FOOD_DURATION = 7000; // milliseconds
     const LEVEL_UP_THRESHOLD = 5; // Score needed to level up
+    const VIBRATION_DURATION = 30; // milliseconds for button vibration
 
     // Game variables
     let snake = [];
@@ -36,6 +37,7 @@ document.addEventListener('DOMContentLoaded', () => {
     let musicEnabled = true;
     let highScores = [];
     let justAteFood = false; // Flag to track if snake just ate food
+    let vibrationEnabled = true; // Flag to enable/disable vibration
 
     // DOM elements - Screens
     const mainMenu = document.getElementById('main-menu');
@@ -71,6 +73,7 @@ document.addEventListener('DOMContentLoaded', () => {
     const themeSelect = document.getElementById('game-theme');
     const soundToggle = document.getElementById('sound-toggle');
     const musicToggle = document.getElementById('music-toggle');
+    const vibrationToggle = document.getElementById('vibration-toggle');
 
     // DOM elements - Mobile Controls
     const upButton = document.getElementById('up-button');
@@ -83,6 +86,13 @@ document.addEventListener('DOMContentLoaded', () => {
     const gameOverSound = document.getElementById('game-over-sound');
     const levelUpSound = document.getElementById('level-up-sound');
     const backgroundMusic = document.getElementById('background-music');
+
+    // Helper function to trigger vibration
+    function vibrateDevice() {
+        if (vibrationEnabled && 'vibrate' in navigator) {
+            navigator.vibrate(VIBRATION_DURATION);
+        }
+    }
 
     // Initialize the game
     function init() {
@@ -106,12 +116,14 @@ document.addEventListener('DOMContentLoaded', () => {
             currentTheme = settings.theme || 'classic';
             soundEnabled = settings.sound !== undefined ? settings.sound : true;
             musicEnabled = settings.music !== undefined ? settings.music : true;
+            vibrationEnabled = settings.vibration !== undefined ? settings.vibration : true;
             
             // Update DOM to reflect settings
             difficultySelect.value = currentDifficulty;
             themeSelect.value = currentTheme;
             soundToggle.checked = soundEnabled;
             musicToggle.checked = musicEnabled;
+            vibrationToggle.checked = vibrationEnabled;
         }
     }
 
@@ -121,7 +133,8 @@ document.addEventListener('DOMContentLoaded', () => {
             difficulty: currentDifficulty,
             theme: currentTheme,
             sound: soundEnabled,
-            music: musicEnabled
+            music: musicEnabled,
+            vibration: vibrationEnabled
         };
         localStorage.setItem('snakeSettings', JSON.stringify(settings));
     }
@@ -182,37 +195,52 @@ document.addEventListener('DOMContentLoaded', () => {
     function setupEventListeners() {
         // Menu navigation
         playButton.addEventListener('click', () => {
+            vibrateDevice();
             showScreen(gameScreen);
             startNewGame();
         });
         
         optionsButton.addEventListener('click', () => {
+            vibrateDevice();
             showScreen(optionsMenu);
         });
         
         highscoresButton.addEventListener('click', () => {
+            vibrateDevice();
             showScreen(highscoresScreen);
         });
         
         optionsBackButton.addEventListener('click', () => {
+            vibrateDevice();
             showScreen(mainMenu);
             saveSettings();
         });
         
         highscoresBackButton.addEventListener('click', () => {
+            vibrateDevice();
             showScreen(mainMenu);
         });
         
         // Game controls
-        pauseButton.addEventListener('click', togglePause);
-        restartButton.addEventListener('click', startNewGame);
+        pauseButton.addEventListener('click', () => {
+            vibrateDevice();
+            togglePause();
+        });
+        
+        restartButton.addEventListener('click', () => {
+            vibrateDevice();
+            startNewGame();
+        });
+        
         menuButton.addEventListener('click', () => {
+            vibrateDevice();
             resetGame();
             showScreen(mainMenu);
         });
         
         // Game over controls
         playAgainButton.addEventListener('click', () => {
+            vibrateDevice();
             if (newHighScoreMessage.classList.contains('hidden') === false) {
                 const playerName = playerNameInput.value.trim() || 'Anonymous';
                 saveHighScore(playerName, score, currentDifficulty);
@@ -222,6 +250,7 @@ document.addEventListener('DOMContentLoaded', () => {
         });
         
         gameOverMenuButton.addEventListener('click', () => {
+            vibrateDevice();
             if (newHighScoreMessage.classList.contains('hidden') === false) {
                 const playerName = playerNameInput.value.trim() || 'Anonymous';
                 saveHighScore(playerName, score, currentDifficulty);
@@ -231,19 +260,23 @@ document.addEventListener('DOMContentLoaded', () => {
         
         // Options controls
         difficultySelect.addEventListener('change', (e) => {
+            vibrateDevice();
             currentDifficulty = e.target.value;
         });
         
         themeSelect.addEventListener('change', (e) => {
+            vibrateDevice();
             currentTheme = e.target.value;
             applyTheme(currentTheme);
         });
         
         soundToggle.addEventListener('change', (e) => {
+            vibrateDevice();
             soundEnabled = e.target.checked;
         });
         
         musicToggle.addEventListener('change', (e) => {
+            vibrateDevice();
             musicEnabled = e.target.checked;
             if (musicEnabled) {
                 backgroundMusic.play();
@@ -252,29 +285,38 @@ document.addEventListener('DOMContentLoaded', () => {
             }
         });
         
+        vibrationToggle.addEventListener('change', (e) => {
+            // Don't vibrate here to respect the new setting immediately
+            vibrationEnabled = e.target.checked;
+        });
+        
         // Keyboard controls
         document.addEventListener('keydown', handleKeyPress);
         
         // Mobile controls
         upButton.addEventListener('click', () => {
+            vibrateDevice();
             if (direction !== DIRECTIONS.DOWN) {
                 nextDirection = DIRECTIONS.UP;
             }
         });
         
         downButton.addEventListener('click', () => {
+            vibrateDevice();
             if (direction !== DIRECTIONS.UP) {
                 nextDirection = DIRECTIONS.DOWN;
             }
         });
         
         leftButton.addEventListener('click', () => {
+            vibrateDevice();
             if (direction !== DIRECTIONS.RIGHT) {
                 nextDirection = DIRECTIONS.LEFT;
             }
         });
         
         rightButton.addEventListener('click', () => {
+            vibrateDevice();
             if (direction !== DIRECTIONS.LEFT) {
                 nextDirection = DIRECTIONS.RIGHT;
             }
@@ -760,32 +802,38 @@ document.addEventListener('DOMContentLoaded', () => {
             case 'ArrowUp':
                 if (direction !== DIRECTIONS.DOWN) {
                     nextDirection = DIRECTIONS.UP;
+                    vibrateDevice();
                 }
                 break;
             case 'ArrowDown':
                 if (direction !== DIRECTIONS.UP) {
                     nextDirection = DIRECTIONS.DOWN;
+                    vibrateDevice();
                 }
                 break;
             case 'ArrowLeft':
                 if (direction !== DIRECTIONS.RIGHT) {
                     nextDirection = DIRECTIONS.LEFT;
+                    vibrateDevice();
                 }
                 break;
             case 'ArrowRight':
                 if (direction !== DIRECTIONS.LEFT) {
                     nextDirection = DIRECTIONS.RIGHT;
+                    vibrateDevice();
                 }
                 break;
             case ' ': // Spacebar
                 if (gameScreen.classList.contains('active')) {
                     togglePause();
+                    vibrateDevice();
                 }
                 break;
             case 'Escape': // Escape key
                 if (gameScreen.classList.contains('active')) {
                     resetGame();
                     showScreen(mainMenu);
+                    vibrateDevice();
                 }
                 break;
         }
